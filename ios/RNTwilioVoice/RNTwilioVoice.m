@@ -43,7 +43,7 @@ RCT_EXPORT_MODULE()
 
 - (NSArray<NSString *> *)supportedEvents
 {
-  return @[@"connectionDidConnect", @"connectionDidDisconnect", @"callRejected", @"deviceReady", @"deviceNotReady"];
+  return @[@"connectionDidConnect", @"connectionDidDisconnect", @"callRejected", @"deviceReady", @"deviceNotReady", @"deviceDidReceiveIncoming"];
 }
 
 @synthesize bridge = _bridge;
@@ -257,6 +257,7 @@ RCT_REMAP_METHOD(getActiveCall,
   NSLog(@"pushRegistry:didReceiveIncomingPushWithPayload:forType");
 
   if ([type isEqualToString:PKPushTypeVoIP]) {
+    [self sendEventWithName:@"deviceDidReceiveIncoming" body:payload.dictionaryPayload];
     [TwilioVoice handleNotification:payload.dictionaryPayload
                                             delegate:self];
   }
